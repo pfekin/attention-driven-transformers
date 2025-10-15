@@ -19,8 +19,6 @@ Applied to time-series forecasting, SLTs achieve **higher accuracy and faster in
 | Top Attention Block | Multi-Head Attention → FFN | O(n²) |
 | Flatten & Projection | Linear mapping to forecast horizon | O(n) |
 
-See [architecture.md](architecture.md) for full details.
-
 ## Experimental Setup
 
 - **Environment:** Google Colab T4 GPU (16 GB)  
@@ -30,20 +28,9 @@ See [architecture.md](architecture.md) for full details.
 
 ## Benchmark Results
 
-| Model | MSE ↓ | MAE ↓ | Speed ↑ (samples/s) |
-|:------|:------:|:------:|:------------------:|
-| PatchTST (baseline) | 0.4667 | 0.4876 | 2 927 |
-| **Sparse-Layered Transformer (ours)** | **0.4430** | **0.4691** | **4 139** |
-| N-BEATS | 0.4527 | 0.4782 | 25 392 |
-| TFT | 2.1001 | 1.0756 | 6 252 |
-| TCN | 1.4645 | 0.9590 | 5 303 |
-
-**ETTh1 Gains:**  
-+5 % MSE improvement, +41 % faster, fewer parameters (~450 K vs 470 K)
-
 ### Across Datasets
 
-| Dataset | PatchTST MSE | SLT MSE | Improvement | Speedup |
+| Dataset | PatchTST MSE | Patch SLT MSE | Improvement | Speedup |
 |:---------|:-------------:|:---------:|:-------------:|:---------:|
 | Weather | 0.1607 | **0.1548** | +3.7 % | × 1.45 |
 | Traffic | 0.3263 | **0.3206** | +1.8 % | × 1.38 |
