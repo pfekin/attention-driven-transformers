@@ -160,13 +160,6 @@ Output Predictions
 
 **Key difference**: No explicit pooling (patches already provide aggregation)
 
-### Why No Pooling in Forecasting?
-
-1. **PatchTST already aggregates**: Patches naturally pool local temporal information
-2. **Continuous values**: Unlike discrete tokens, continuous time series don't need discrete aggregation
-3. **Multivariate**: Each variable processed independently, no global statistics needed
-4. **Empirical results**: Removing pooling works better for forecasting tasks
-
 ---
 
 ## Computational Advantages
@@ -366,4 +359,5 @@ torch.cuda.empty_cache()
 
 **Last Updated**: 2025
 **Author**: [Your name]
+
 **License**: [Your license]
