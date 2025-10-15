@@ -205,7 +205,7 @@ CONFIG = {
 ```bibtex
 @article{Sparse_Layered_Transformers_2025,
   title = {Sparse-Layered Transformers for Time-Series Forecasting},
-  author = {Pascal Fekin},
+  author = {Pascal Ekin},
   year = {2025},
   url = {https://github.com/pfekin/sparse-layered-transformers}
 }
