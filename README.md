@@ -134,6 +134,4 @@ I’m seeking collaborators with access to large-scale compute resources to trai
 ## License
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE)
 
-Licensed under the **Apache License 2.0** © 2025 Pascal Fekin.
-
 > ⚠️ Research-only code demonstrating relative performance under constrained GPU settings.
