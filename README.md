@@ -81,14 +81,12 @@ These layers are linear in sequence length (O(n)) and capture local temporal str
 
 ### 3. Multiplicative Positional Encoding
 
-The model uses multiplicative positional encoding, scaling features by learned positional weights:
+The model uses learned multiplicative positional encoding, scaling features by learned positional weights:
 
 ```python
 x = patch_embedding(patches)
 x = x * self.pos_encoding
 ```
-
-This allows smooth temporal variation modeling without inflating parameters.
 
 ### 4. Final Attention Layer
 
@@ -115,7 +113,7 @@ class StandardAttentionBlock(nn.Module):
         return self.norm2(x + self.ffn(x))
 ```
 
-This layer provides temporal integration across patches within a single variable, functioning as the only attention-based mixing step.
+The final attention layer applies self-attention across patch embeddings for each variable, serving as the model’s only mechanism for direct temporal interaction between patches.
 
 ### 5. Flattening & Prediction
 
