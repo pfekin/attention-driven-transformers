@@ -22,7 +22,7 @@ Applied to time-series forecasting, SLTs achieve higher accuracy and faster infe
 
 ### Visual overview 
 <div align="center">
-  <img src="architecture.png" alt="Sparse-Layered Transformer Diagram" width="800"/>
+  <img src="architecture.png" alt="Sparse-Layered Transformer Diagram" width="400"/>
 </div>
 
 ## Implementation Details
