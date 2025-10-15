@@ -1,21 +1,15 @@
 # Sparse-Layered Transformers for Time-Series Forecasting  
 **Attention-driven architecture using simplified projection layers**
 
-[![TechRxiv](https://img.shields.io/badge/TechRxiv-Sparse--Layered_Transformers-b31b1b.svg)](https://doi.org/10.36227/techrxiv.175790522.25734653/v2)  
-[![GitHub – Language Modeling](https://img.shields.io/badge/GitHub-Language_Modeling-blue)](https://github.com/pfekin/summation-based-transformers)
-
----
-
 ## Overview
 
-This repository introduces **Sparse-Layered Transformers (SLTs)** — forecasting models where **a single top attention layer drives multiple lightweight linear–activation projection blocks**.  
+This repository introduces **Sparse-Layered Transformers (SLTs)** — forecasting models in which **a single top attention layer drives multiple lightweight linear–activation projection blocks**.
 
-The approach generalizes the 2025 [*Summation-Based Transformers* (TechRxiv)](https://doi.org/10.36227/techrxiv.175790522.25734653/v2) framework:
-> **Simpler projection layers guided by attention** — attention as a global driver, not a repeated mechanism.
+The approach generalizes the 2025 [*Summation-Based Transformers* (TechRxiv)](https://doi.org/10.36227/techrxiv.175790522.25734653/v2) **research and [accompanying code](https://github.com/pfekin/summation-based-transformers)**:
 
-When applied to time-series forecasting, SLTs achieve **higher accuracy and faster inference** than PatchTST, with fewer parameters and lower complexity.
+> **Simpler projection layers guided by attention** — attention as the global driver rather than the repeated mechanism.
 
----
+Applied to time-series forecasting, SLTs achieve **higher accuracy and faster inference** than full-attention models such as PatchTST, while using fewer parameters and lower memory.
 
 ## Architecture Summary
 
@@ -27,16 +21,12 @@ When applied to time-series forecasting, SLTs achieve **higher accuracy and fast
 
 See [architecture.md](architecture.md) for full details.
 
----
-
 ## Experimental Setup
 
 - **Environment:** Google Colab T4 GPU (16 GB)  
 - **Datasets:** ETTh1/2, ETTm1/2, Weather, Traffic  
 - **Training:** Adam (lr=1e-4), GELU activation, multiplicative positional encoding  
 - **Layers:** 2 projection + 1 attention  
-
----
 
 ## Benchmark Results
 
@@ -51,8 +41,6 @@ See [architecture.md](architecture.md) for full details.
 **ETTh1 Gains:**  
 +5 % MSE improvement, +41 % faster, fewer parameters (~450 K vs 470 K)
 
----
-
 ### Across Datasets
 
 | Dataset | PatchTST MSE | SLT MSE | Improvement | Speedup |
@@ -65,8 +53,6 @@ See [architecture.md](architecture.md) for full details.
 | ETTm2 | 0.1850 | **0.1751** | +5.4 % | × 1.44 |
 
 > ⚠️ Lightweight implementations optimized for Colab; not reference versions of Darts or Hugging Face.
-
----
 
 ## Installation & Usage
 
@@ -92,15 +78,18 @@ CONFIG = {
 }
 ```
 
----
-
 ## Key Findings
 
 1. **Attention-Driven Architecture** — A single attention block *drives* simpler projection layers. Attention becomes the representational organizer, not the primary computational cost.
 2. **Efficient Global Modeling** — Projection layers capture local structure efficiently (O(n)); the final attention layer integrates global context (O(n²)).
 3. **Architectural Continuity** — Extends the *Summation-Based Transformer* idea — simple projection blocks guided by top-level attention — from language modeling to forecasting.
 
----
+## References
+
+1. **PatchTST**: Nie et al., "A Time Series is Worth 64 Words", ICLR 2023
+2. **Summation-Based Transformers**: [Original paper](https://doi.org/10.36227/techrxiv.175790522.25734653/v2)
+3. **Attention Is All You Need**: Vaswani et al., NeurIPS 2017
+4. **N-BEATS**: Oreshkin et al., ICLR 2020
 
 ## Limitations & Future Work
 
@@ -133,11 +122,9 @@ CONFIG = {
 }
 ```
 
----
-
 ## Contact & Collaboration
 
-I’m seeking collaborators with access to large-scale compute resources to train attention-driven transformers at language-modeling scale.
+I’m seeking collaborators with access to large-scale compute resources to train summation-based transformers at language-modeling scale.
 
 * 📧 Email: [your email]
 * 🐙 GitHub: [pfekin](https://github.com/pfekin)
