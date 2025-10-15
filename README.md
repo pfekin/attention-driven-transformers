@@ -5,11 +5,11 @@
 
 This repository introduces **Sparse-Layered Transformers (SLTs)** — forecasting models in which **a single top attention layer drives multiple lightweight linear–activation projection blocks**.
 
-The approach generalizes the 2025 [*Summation-Based Transformers* (TechRxiv)](https://doi.org/10.36227/techrxiv.175790522.25734653/v2) **research and [accompanying code](https://github.com/pfekin/summation-based-transformers)**:
+The approach generalizes the 2025 [*Summation-Based Transformers* (TechRxiv)](https://doi.org/10.36227/techrxiv.175790522.25734653/v2) research and [accompanying code](https://github.com/pfekin/summation-based-transformers):
 
-> **Simpler projection layers guided by attention** — attention as the global driver rather than the repeated mechanism.
+> Simpler projection layers guided by attention — attention as the global driver rather than the repeated mechanism.
 
-Applied to time-series forecasting, SLTs achieve **higher accuracy and faster inference** than full-attention models such as PatchTST, while using fewer parameters and lower memory.
+Applied to time-series forecasting, SLTs achieve higher accuracy and faster inference than full-attention models such as PatchTST, while using fewer parameters and lower memory.
 
 ## Architecture Summary
 
@@ -44,8 +44,8 @@ Applied to time-series forecasting, SLTs achieve **higher accuracy and faster in
 ## Installation & Usage
 
 ```bash
-git clone https://github.com/pfekin/forecasting-sparse-layered-transformers
-cd forecasting-sparse-layered-transformers
+git clone https://github.com/pfekin/sparse-layered-transformers
+cd sparse-layered-transformers
 pip install torch numpy pandas scikit-learn darts
 python benchmark.py
 ````
@@ -73,10 +73,10 @@ CONFIG = {
 
 ## References
 
-1. **PatchTST**: Nie et al., "A Time Series is Worth 64 Words", ICLR 2023
-2. **Summation-Based Transformers**: [Original paper](https://doi.org/10.36227/techrxiv.175790522.25734653/v2)
-3. **Attention Is All You Need**: Vaswani et al., NeurIPS 2017
-4. **N-BEATS**: Oreshkin et al., ICLR 2020
+1. PatchTST: Nie et al., "A Time Series is Worth 64 Words", ICLR 2023 [![GitHub](https://img.shields.io/badge/GitHub-PatchTST-181717?style=for-the-badge&logo=github)](https://github.com/yuqinie98/PatchTST)
+2. Summation-Based Transformers: [Original paper](https://doi.org/10.36227/techrxiv.175790522.25734653/v2)
+3. Attention Is All You Need: Vaswani et al., NeurIPS 2017
+4. N-BEATS: Oreshkin et al., ICLR 2020
 
 ## Limitations & Future Work
 
@@ -96,7 +96,7 @@ CONFIG = {
   title = {Sparse-Layered Transformers for Time-Series Forecasting},
   author = {Pascal Fekin},
   year = {2025},
-  url = {https://github.com/pfekin/forecasting-sparse-layered-transformers}
+  url = {https://github.com/pfekin//sparse-layered-transformers}
 }
 
 @article{fekin2025summation,
