@@ -39,7 +39,7 @@ Applied to time-series forecasting, SLTs achieve higher accuracy and faster infe
 | ETTm1 | 0.3704 | **0.3295** | +11.0 % | × 1.34 |
 | ETTm2 | 0.1850 | **0.1751** | +5.4 % | × 1.44 |
 
-> ⚠️ Lightweight implementations optimized for Colab; not reference versions of Darts or Hugging Face.
+> ⚠️ Lightweight implementations optimized for Colab. Not reference versions of Darts or Hugging Face.
 
 ## Installation & Usage
 
@@ -120,5 +120,3 @@ I’m seeking collaborators with access to large-scale compute resources to trai
 
 ## License
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE)
-
-> ⚠️ Research-only code demonstrating relative performance under constrained GPU settings.
