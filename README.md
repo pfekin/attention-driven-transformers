@@ -20,11 +20,6 @@ Applied to time-series forecasting, SLTs achieve higher accuracy and faster infe
 | Top Attention Block   | Multi-Head Attention → FFN           | O(n²)      |
 | Flatten & Projection  | Linear mapping to forecast horizon   | O(n)       |
 
-### Visual overview 
-<div align="center">
-  <img src="architecture.png" alt="Sparse-Layered Transformer Diagram" width="600"/>
-</div>
-
 ## Implementation Details
 
 The implementation builds on PatchTST but simplifies most transformer layers into projection-based blocks and retains a single top attention layer that integrates global context.
