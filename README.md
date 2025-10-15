@@ -161,18 +161,19 @@ Edit configuration in `benchmark.py`:
 
 ```python
 CONFIG = {
-    'seq_len': 512,
-    'pred_len': 96,
-    'patch_len': 16,
-    'stride': 8,
-    'd_model': 128,
-    'n_heads': 8,
-    'n_layers': 3,
-    'batch_size': 32,
-    'n_epochs': 10,
-    'lr': 1e-4,
-    'dropout': 0.15,
-}
+        'seq_len': 512,
+        'pred_len': 96,
+        'patch_len': 16,
+        'stride': 8,
+        'd_model': 128,
+        'n_heads': 8,
+        'n_layers': 3,
+        'd_ff': 256,
+        'batch_size': 32,
+        'n_epochs': 10,
+        'lr': 1e-4,
+        'dropout': 0.15
+    }
 ```
 
 ## Key Findings
