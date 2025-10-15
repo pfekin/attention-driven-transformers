@@ -21,7 +21,9 @@ Applied to time-series forecasting, SLTs achieve higher accuracy and faster infe
 | Flatten & Projection  | Linear mapping to forecast horizon   | O(n)       |
 
 ### Visual overview 
-![Architecture](architecture_diagram.svg)
+<div align="center">
+  <img src="architecture.png" alt="Sparse-Layered Transformer Diagram" width="800"/>
+</div>
 
 ## Implementation Details
 
