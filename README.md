@@ -202,19 +202,20 @@ CONFIG = {
 ## Citation
 
 ```bibtex
-@article{fekin2025slt,
+@article{Sparse_Layered_Transformers_2025,
   title = {Sparse-Layered Transformers for Time-Series Forecasting},
   author = {Pascal Fekin},
   year = {2025},
   url = {https://github.com/pfekin/sparse-layered-transformers}
 }
 
-@article{fekin2025summation,
-  title = {Summation-Based Transformers},
-  author = {Pascal Fekin},
-  journal = {TechRxiv},
-  year = {2025},
-  doi = {10.36227/techrxiv.175790522.25734653/v2}
+@article{Summation_Based_Transformers_2025,
+  title={Summation-Based Transformers: A Path Toward Linear Complexity Sequence Modeling},
+  author={Pascal Ekin},
+  journal={TechRxiv},  
+  year={2025},
+  doi={10.36227/techrxiv.175790522.25734653/v2},  
+  url={https://doi.org/10.36227/techrxiv.175790522.25734653/v2},
 }
 ```
 
