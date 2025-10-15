@@ -97,7 +97,6 @@ CONFIG = {
 * Memory-limited experiments (T4 GPU)
 * Future work:
 
-  * Multi-scale and deeper hybrids
   * Integration with Hugging Face forecasting APIs
   * Theoretical study of attention-driven representational flow
 
