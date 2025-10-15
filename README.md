@@ -30,7 +30,7 @@ Applied to time-series forecasting, SLTs achieve higher accuracy and faster infe
 
 ### Across Datasets
 
-| Dataset | PatchTST MSE | Patch SLT MSE | Improvement | Speedup |
+| Dataset | PatchTST MSE | PatchTST SLT MSE | Improvement | Speedup |
 |:---------|:-------------:|:---------:|:-------------:|:---------:|
 | Weather | 0.1607 | **0.1548** | +3.7 % | × 1.45 |
 | Traffic | 0.3263 | **0.3206** | +1.8 % | × 1.38 |
