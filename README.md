@@ -4,7 +4,7 @@
 
 ## Overview
 
-This repository introduces **Sparse-Layered Transformers (SLTs)** — forecasting models in which **a single top attention layer drives multiple lightweight linear–activation projection blocks**.
+This repository introduces Sparse-Layered Transformers (SLTs) — forecasting models in which a single top attention layer drives multiple lightweight linear–activation projection blocks.
 
 The approach generalizes the 2025 [*Summation-Based Transformers* (TechRxiv)](https://doi.org/10.36227/techrxiv.175790522.25734653/v2) research and [accompanying code](https://github.com/pfekin/summation-based-transformers):
 
@@ -25,7 +25,7 @@ Applied to time-series forecasting, SLTs achieve higher accuracy and faster infe
 
 ## Implementation Details
 
-The implementation builds on PatchTST but simplifies most transformer layers into **projection-based blocks** and retains a **single top attention layer** that integrates global context.
+The implementation builds on PatchTST but simplifies most transformer layers into projection-based blocks and retains a single top attention layer that integrates global context.
 
 ### 1. Patching
 
@@ -53,7 +53,7 @@ This reduces the input length and allows local temporal structures to be learned
 
 ### 2. Projection Blocks
 
-Most transformer layers are replaced by **projection blocks**, which apply a bias-free linear projection followed by GELU activation and normalization.
+Most transformer layers are replaced by projection blocks, which apply a bias-free linear projection followed by GELU activation and normalization.
 
 ```python
 class ProjectionBlock(nn.Module):
@@ -78,11 +78,11 @@ class ProjectionBlock(nn.Module):
         return self.norm2(x + self.ffn(x))
 ```
 
-These layers are **linear in sequence length** O(n) and preserve local structure efficiently.
+These layers are linear in sequence length O(n) and preserve local structure efficiently.
 
 ### 3. Multiplicative Positional Encoding
 
-Unlike standard additive encodings, the model employs **multiplicative positional encoding**, which scales features by learned positional weights:
+Unlike standard additive encodings, the model employs multiplicative positional encoding, which scales features by learned positional weights:
 
 ```python
 x = patch_embedding(patches)   # (batch*n_vars, num_patches, d_model)
@@ -93,7 +93,7 @@ This modulates feature amplitudes by position, helping the model capture smooth 
 
 ### 4. Final Attention Layer
 
-The final layer is a standard **multi-head self-attention block**, responsible for integrating global dependencies across all patches:
+The final layer is a standard multi-head self-attention block, responsible for integrating global dependencies across all patches:
 
 ```python
 class StandardAttentionBlock(nn.Module):
@@ -115,7 +115,7 @@ class StandardAttentionBlock(nn.Module):
         return self.norm2(x + self.ffn(x))
 ```
 
-This **single top attention layer** drives the representational hierarchy, providing global coordination while projection layers encode local context.
+This single top attention layer drives the representational hierarchy, providing global coordination while projection layers encode local context.
 
 ### 5. Flattening & Prediction
 
@@ -234,9 +234,3 @@ I’m seeking collaborators with access to large-scale compute resources to trai
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE)
 
-If you want, I can:
-
-* produce a small SVG diagram version (file) instead of ASCII and attach it for use in the README, or
-* directly update the `README3.md` file in your repo (I can provide the exact git/patch instructions if you want to commit it yourself).
-
-Which would you prefer?
