@@ -1,3 +1,4 @@
+[![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE)
 # Attention-Driven Transformers for Time-Series Forecasting
 
 Simplified projection architectures guided by top-level attention
@@ -215,8 +216,5 @@ CONFIG = {
 
 Seeking collaborators with access to large-scale compute resources to train attention-driven transformers at language-modeling scale.
 
-GitHub: [pfekin](https://github.com/pfekin)
-Paper: [TechRxiv 2025](https://doi.org/10.36227/techrxiv.175790522.25734653/v2)
-
-License: [Apache 2.0](LICENSE)
+* **Email**: [pfekin@gmail.com](mailto:pfekin@gmail.com)
 
