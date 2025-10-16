@@ -166,6 +166,9 @@ CONFIG = {
     'dropout': 0.15,
 }
 ```
+You can run the full benchmark directly in Google Colab:
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1RA2IswgKTHIzMXS9781RA_ZfTLudf9VL?usp=sharing)
 
 ## Key findings
 
