@@ -178,7 +178,7 @@ You can run the full benchmark directly in Google Colab:
 
 1. **Attention-driven architecture** – A single top attention block drives simpler projection layers, structuring representations efficiently without dense attention stacking.
 2. **Per-variable temporal modeling** – Each variable is modeled independently across time using shared parameters, enabling efficient parallelization.
-3. **Efficient temporal modeling** – Projection layers encode local patch features (O (n)); the attention layer models cross-patch dependencies (O (n²)).
+3. **Efficient temporal modeling** – Projection layers encode local patch features O(n), the attention layer models cross-patch dependencies O(n²).
 4. **Generalizable attention hierarchy** – Forecasting models concentrate attention at the top, while deeper architectures (e.g., LLMs) can interleave attention with projection layers. In both cases, attention functions as the organizational driver of representation.
 5. **Architectural continuity** – Extends the Summation-Based Transformer principle—simple projection layers guided by top-level attention—from language modeling to forecasting.
 
