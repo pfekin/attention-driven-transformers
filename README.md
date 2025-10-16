@@ -129,15 +129,15 @@ pred = pred.reshape(batch_size, n_vars, pred_len).transpose(1, 2)
 * Layers: 2 projection + 1 attention
 
 ## Benchmark results
+| Dataset | TCN MSE | N-BEATS MSE | PatchTST MSE | Patched ADT MSE | Improvement | Speedup |
+| :-----: | :------: | :---------: | :-----------: | :--------------: | :---------: | :-----: |
+| Weather | 0.3679 | 0.1737 | 0.1607 | **0.1548** | +3.7 % | × 1.45 |
+| Traffic | 0.5141 | 0.3297 | 0.3263 | **0.3206** | +1.8 % | × 1.38 |
+| ETTh1 | 1.5799 | 0.4642 | 0.4450 | **0.4387** | +1.4 % | × 1.36 |
+| ETTh2 | 1.1139 | 0.2553 | 0.2438 | **0.1941** | +20.4 % | × 1.37 |
+| ETTm1 | 0.7694 | 0.3682 | 0.3704 | **0.3295** | +11.0 % | × 1.34 |
+| ETTm2 | 0.7570 | 0.1807 | 0.1850 | **0.1751** | +5.4 % | × 1.44 |
 
-| Dataset | N-BEATS MSE | PatchTST MSE | Patched ADT MSE | Improvement | Speedup |
-| :-----: | :---------: | :----------: | :--------------: | :---------: | :-----: |
-| Weather |    0.1737   |    0.1607    |    **0.1548**    |    +3.7 %   |  × 1.45 |
-| Traffic |    0.3297   |    0.3263    |    **0.3206**    |    +1.8 %   |  × 1.38 |
-|  ETTh1  |    0.4642   |    0.4450    |    **0.4387**    |    +1.4 %   |  × 1.36 |
-|  ETTh2  |    0.2553   |    0.2438    |    **0.1941**    |   +20.4 %   |  × 1.37 |
-|  ETTm1  |    0.3682   |    0.3704    |    **0.3295**    |   +11.0 %   |  × 1.34 |
-|  ETTm2  |    0.1807   |    0.1850    |    **0.1751**    |    +5.4 %   |  × 1.44 |
 
 Lightweight implementations were optimized for Colab and are not intended as reference Darts or Hugging Face baselines.
 
