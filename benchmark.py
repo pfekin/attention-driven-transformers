@@ -3,10 +3,8 @@ Minimal PatchTST Implementation with Summation-Based Attention + Other Architect
 
 Compares:
 1. Baseline PatchTST with standard attention (custom implementation)
-2. Hybrid PatchTST with summation attention (trained from scratch)
+2. Hybrid PatchTST with summation attention 
 3. N-BEATS (custom implementation)
-4. Temporal Fusion Transformer (custom implementation)
-5. TCN - Temporal Convolutional Network (custom implementation)
 
 Benchmark on ETTh1, ETTh2, ETTm1, ETTm2, Weather, Traffic, Electricity datasets
 """
@@ -124,9 +122,7 @@ def load_dataset_general(name, seq_len, pred_len, batch_size=32,
     return train_loader, val_loader, test_loader, n_vars, scaler
 
 
-# ============================================================================
 # PatchTST Models
-# ============================================================================
 
 class Patching(nn.Module):
     """Convert time series into patches"""
@@ -258,9 +254,7 @@ class HybridPatchTST(nn.Module):
         return x
 
 
-# ============================================================================
 # N-BEATS Implementation
-# ============================================================================
 
 class NBeatsBlock(nn.Module):
     def __init__(self, input_size, theta_size, hidden_size, num_layers):
@@ -305,9 +299,8 @@ class NBeats(nn.Module):
         
         return forecast.transpose(1, 2)  # (batch, pred_len, n_vars)
 
-# ============================================================================
+
 # Training & Evaluation
-# ============================================================================
 
 def train_model(model, train_loader, val_loader, criterion, optimizer, device, n_epochs=30):
     """Train model and return best validation loss"""
@@ -402,9 +395,7 @@ def measure_inference_speed(model, loader, device, warmup=2, reps=5):
     return total_samples / total_time
 
 
-# ============================================================================
 # Main Experiment
-# ============================================================================
 
 def run_experiment(dataset_name, train_loader, val_loader, test_loader, n_vars, config, device):
     print("\n" + "="*70)
@@ -486,7 +477,7 @@ if __name__ == "__main__":
         'dropout': 0.15
     }
 
-    datasets_to_run = ["ETTh1", "ETTh2", "ETTm1", "ETTm2", "Weather", "Traffic", "Electricity"]
+    datasets_to_run = ["ETTh1", "ETTh2", "ETTm1", "ETTm2", "Weather", "Traffic"] # re-insert "Electricity", dataset is huge
 
     results = []
     for dset in datasets_to_run:
