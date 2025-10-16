@@ -1,34 +1,34 @@
-# Sparse-Layered Transformers for Time-Series Forecasting
+# Attention-Driven Transformers for Time-Series Forecasting
 
-**Attention-driven architecture using simplified projection layers**
+Simplified projection architectures guided by top-level attention
 
 ## Overview
 
-This repository introduces Sparse-Layered Transformers (SLTs) — forecasting models in which a single top attention layer drives multiple lightweight linear–activation projection blocks.
+This repository introduces **Attention-Driven Transformers (ADTs)** — forecasting models in which a single top attention layer drives multiple lightweight projection blocks.
 
-The approach generalizes the 2025 [*Summation-Based Transformers* (TechRxiv)](https://doi.org/10.36227/techrxiv.175790522.25734653/v2) research and [accompanying code](https://github.com/pfekin/summation-based-transformers):
+The approach extends the 2025 [*Summation-Based Transformers* (TechRxiv)](https://doi.org/10.36227/techrxiv.175790522.25734653/v2) research and its [accompanying code](https://github.com/pfekin/summation-based-transformers), which first proposed that attention acts as a global representational driver rather than a uniformly repeated mechanism.
 
-> Simpler projection layers guided by attention — attention as the global driver rather than the repeated mechanism.
+In ADTs, most layers are simple linear–activation projections, while a top attention block organizes temporal dependencies across patch embeddings. The design yields models that are faster and more memory-efficient than dense-attention baselines such as PatchTST, while often improving accuracy.
 
-Applied to time-series forecasting, SLTs achieve higher accuracy and faster inference than full-attention models such as PatchTST, while using fewer parameters and lower memory.
+In deeper architectures such as large language models, attention may appear interleaved across layers rather than concentrated at the top. The attention-driven principle—attention globally organizing simpler transformations—remains consistent across scales.
 
-## Architecture Summary
+## Architecture summary
 
-| Layer Type            | Operation                            | Complexity |
+| Layer type            | Operation                            | Complexity |
 | --------------------- | ------------------------------------ | ---------- |
-| Projection Block (×2) | Linear (no bias) → GELU → Norm → FFN | O(n)       |
-| Top Attention Block   | Multi-Head Attention → FFN           | O(n²)      |
-| Flatten & Projection  | Linear mapping to forecast horizon   | O(n)       |
+| Projection block (×2) | Linear (no bias) → GELU → Norm → FFN | O(n)       |
+| Top attention block   | Multi-head attention → FFN           | O(n²)      |
+| Flatten & projection  | Linear mapping to forecast horizon   | O(n)       |
 
-Each variable (channel) in the multivariate time series is processed independently.
-Projection and attention blocks operate *per variable*, learning temporal dependencies across that variable’s patches.
-The top attention layer integrates dependencies across patches within a variable, not across variables.
+Each variable (channel) in the dataset is handled independently during training for efficiency, following the same pattern as the individual-channel mode in PatchTST.
 
-## Implementation Details
+Projection blocks perform local transformations within patch embeddings, while the top attention block governs longer-range temporal dependencies. The same design principle could be extended to deeper networks by interleaving attention and projection layers.
+
+## Implementation details
 
 ### 1. Patching
 
-Time series are segmented into overlapping fixed-length windows (patches), producing a sequence of short subsequences that act as tokens:
+Time series are segmented into overlapping windows (patches) that serve as input tokens:
 
 ```python
 class Patching(nn.Module):
@@ -46,13 +46,9 @@ class Patching(nn.Module):
         return patches.reshape(x.size(0) * x.size(2), num_patches, self.patch_len)
 ```
 
-Each variable is treated as an independent input sequence.
-After patching, the tensor shape becomes `(batch * n_vars, num_patches, patch_len)`, ensuring that all variables are handled separately.
+### 2. Projection blocks
 
-
-### 2. Projection Blocks
-
-Most transformer layers are replaced by projection blocks, applying a bias-free linear projection followed by GELU activation and normalization:
+Projection blocks replace most attention layers with a bias-free linear projection followed by GELU activation and normalization:
 
 ```python
 class ProjectionBlock(nn.Module):
@@ -77,20 +73,20 @@ class ProjectionBlock(nn.Module):
         return self.norm2(x + self.ffn(x))
 ```
 
-These layers are linear in sequence length (O(n)) and capture local temporal structure within each variable’s patches.
+These layers are linear in sequence length and capture local transformations within each patch embedding without explicit token mixing across time.
 
-### 3. Multiplicative Positional Encoding
+### 3. Multiplicative positional encoding
 
-The model uses learned multiplicative positional encoding, scaling features by learned positional weights:
+ADTs use multiplicative positional encoding, scaling features by learned positional weights:
 
 ```python
 x = patch_embedding(patches)
 x = x * self.pos_encoding
 ```
 
-### 4. Final Attention Layer
+### 4. Final attention layer
 
-The final multi-head self-attention block operates across patch embeddings within each variable — not across variables:
+The final multi-head self-attention block processes the sequence of patch embeddings and provides the model’s only mechanism for direct temporal interaction between patches:
 
 ```python
 class StandardAttentionBlock(nn.Module):
@@ -113,11 +109,9 @@ class StandardAttentionBlock(nn.Module):
         return self.norm2(x + self.ffn(x))
 ```
 
-The final attention layer applies self-attention across patch embeddings for each variable, serving as the model’s only mechanism for direct temporal interaction between patches.
+### 5. Flattening and prediction
 
-### 5. Flattening & Prediction
-
-After the attention stage, outputs are flattened and projected to the forecast horizon:
+The attention output is flattened and projected to the final prediction:
 
 ```python
 x = x.reshape(batch_size * n_vars, -1)
@@ -125,18 +119,16 @@ pred = self.head(x)
 pred = pred.reshape(batch_size, n_vars, pred_len).transpose(1, 2)
 ```
 
-Each variable’s representation is projected independently through a shared linear head, then reassembled into `(batch, pred_len, n_vars)`.
+## Experimental setup
 
-## Experimental Setup
+* Environment: Google Colab T4 GPU (16 GB)
+* Datasets: ETTh1/2, ETTm1/2, Weather, Traffic
+* Training: Adam (lr = 1e-4), GELU activation, multiplicative positional encoding
+* Layers: 2 projection + 1 attention
 
-* **Environment:** Google Colab T4 GPU (16 GB)
-* **Datasets:** ETTh1/2, ETTm1/2, Weather, Traffic
-* **Training:** Adam (lr = 1e-4), GELU activation, multiplicative positional encoding
-* **Layers:** 2 projection + 1 attention
+## Benchmark results
 
-## Benchmark Results
-
-| Dataset | N-BEATS MSE | PatchTST MSE | PatchTST SLT MSE | Improvement | Speedup |
+| Dataset | N-BEATS MSE | PatchTST MSE | PatchTST ADT MSE | Improvement | Speedup |
 | :-----: | :---------: | :----------: | :--------------: | :---------: | :-----: |
 | Weather |    0.1737   |    0.1607    |    **0.1548**    |    +3.7 %   |  × 1.45 |
 | Traffic |    0.3297   |    0.3263    |    **0.3206**    |    +1.8 %   |  × 1.38 |
@@ -145,89 +137,85 @@ Each variable’s representation is projected independently through a shared lin
 |  ETTm1  |    0.3682   |    0.3704    |    **0.3295**    |   +11.0 %   |  × 1.34 |
 |  ETTm2  |    0.1807   |    0.1850    |    **0.1751**    |    +5.4 %   |  × 1.44 |
 
-> ⚠️ Lightweight implementations optimized for Colab.
-> Not reference versions of Darts or Hugging Face models.
+Lightweight implementations were optimized for Colab and are not intended as reference Darts or Hugging Face baselines.
 
-## Installation & Usage
+## Installation and usage
 
 ```bash
-git clone https://github.com/pfekin/sparse-layered-transformers
-cd sparse-layered-transformers
+git clone https://github.com/pfekin/attention-driven-transformers
+cd attention-driven-transformers
 pip install torch numpy pandas scikit-learn darts
 python benchmark.py
 ```
 
-Edit configuration in `benchmark.py`:
+Basic configuration example:
 
 ```python
 CONFIG = {
-        'seq_len': 512,
-        'pred_len': 96,
-        'patch_len': 16,
-        'stride': 8,
-        'd_model': 128,
-        'n_heads': 8,
-        'n_layers': 3,
-        'd_ff': 256,
-        'batch_size': 32,
-        'n_epochs': 10,
-        'lr': 1e-4,
-        'dropout': 0.15
-    }
+    'seq_len': 512,
+    'pred_len': 96,
+    'patch_len': 16,
+    'stride': 8,
+    'd_model': 128,
+    'n_heads': 8,
+    'n_layers': 3,
+    'batch_size': 32,
+    'n_epochs': 10,
+    'lr': 1e-4,
+    'dropout': 0.15,
+}
 ```
 
-## Key Findings
+## Key findings
 
-1. **Attention-Driven Architecture** — A single top attention block *drives* simpler projection layers, organizing representations efficiently while avoiding dense attention stacking.
-2. **Per-Variable Temporal Modeling** — Each variable is processed independently across time, capturing patch-level temporal dependencies with shared parameters and high parallel efficiency.
-3. **Efficient Global Modeling** — Projection layers encode local structures (O(n)); the top attention integrates patch dependencies (O(n²)).
-4. **Architectural Continuity** — Extends the *Summation-Based Transformer* idea — simple projection blocks guided by top-level attention — from language modeling to forecasting.
+1. **Attention-driven architecture** – A single top attention block drives simpler projection layers, structuring representations efficiently without dense attention stacking.
+2. **Per-variable temporal modeling** – Each variable is modeled independently across time using shared parameters, enabling efficient parallelization.
+3. **Efficient temporal modeling** – Projection layers encode local patch features (O (n)); the attention layer models cross-patch dependencies (O (n²)).
+4. **Generalizable attention hierarchy** – Forecasting models concentrate attention at the top, while deeper architectures (e.g., LLMs) can interleave attention with projection layers. In both cases, attention functions as the organizational driver of representation.
+5. **Architectural continuity** – Extends the Summation-Based Transformer principle—simple projection layers guided by top-level attention—from language modeling to forecasting.
 
 ## References
 
 1. Nie et al., *PatchTST: A Time Series is Worth 64 Words*, ICLR 2023 — [GitHub](https://github.com/yuqinie98/PatchTST)
-2. Ekin, *Summation-Based Transformers*, TechRxiv 2025 — [DOI 10.36227/techrxiv.175790522.25734653/v2](https://doi.org/10.36227/techrxiv.175790522.25734653/v2)
+2. **Ekin**, *Summation-Based Transformers*, TechRxiv 2025 — [DOI 10.36227/techrxiv.175790522.25734653/v2](https://doi.org/10.36227/techrxiv.175790522.25734653/v2)
 3. Vaswani et al., *Attention Is All You Need*, NeurIPS 2017
 4. Oreshkin et al., *N-BEATS: Neural Basis Expansion Analysis for Interpretable Time Series Forecasting*, ICLR 2020
 
-## Limitations & Future Work
+## Limitations and future work
 
-* Lightweight, Colab-optimized prototypes
-* Per-variable temporal attention only (no cross-variable mixing)
+* Lightweight prototypes optimized for Colab
+* Currently independent per-variable modeling
 * Future directions:
 
   * Cross-variable attention extensions
-  * Integration with Hugging Face forecasting APIs
-  * Deeper analysis of attention-driven representational flow
+  * Interleaved attention–projection stacks for deeper models
+  * Theoretical analysis of attention-driven representation dynamics
 
 ## Citation
 
 ```bibtex
-@article{Sparse_Layered_Transformers_2025,
-  title = {Sparse-Layered Transformers for Time-Series Forecasting},
-  author = {Pascal Ekin},
-  year = {2025},
-  url = {https://github.com/pfekin/sparse-layered-transformers}
+@article{ekin2025adt,
+  title   = {Attention-Driven Transformers for Time-Series Forecasting},
+  author  = {Pascal Ekin},
+  year    = {2025},
+  url     = {https://github.com/pfekin/attention-driven-transformers}
 }
 
-@article{Summation_Based_Transformers_2025,
-  title={Summation-Based Transformers: A Path Toward Linear Complexity Sequence Modeling},
-  author={Pascal Ekin},
-  journal={TechRxiv},  
-  year={2025},
-  doi={10.36227/techrxiv.175790522.25734653/v2},  
-  url={https://doi.org/10.36227/techrxiv.175790522.25734653/v2},
+@article{ekin2025summation,
+  title   = {Summation-Based Transformers},
+  author  = {Pascal Ekin},
+  journal = {TechRxiv},
+  year    = {2025},
+  doi     = {10.36227/techrxiv.175790522.25734653/v2}
 }
 ```
 
-## Contact & Collaboration
+## Contact and collaboration
 
 Seeking collaborators with access to large-scale compute resources to train attention-driven transformers at language-modeling scale.
 
-* 📧 Email: [your email]
-* 🐙 GitHub: [pfekin](https://github.com/pfekin)
-* 📄 Paper: [TechRxiv 2025](https://doi.org/10.36227/techrxiv.175790522.25734653/v2)
+GitHub: [pfekin](https://github.com/pfekin)
+Paper: [TechRxiv 2025](https://doi.org/10.36227/techrxiv.175790522.25734653/v2)
 
-## License
+License: [Apache 2.0](LICENSE)
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE)
