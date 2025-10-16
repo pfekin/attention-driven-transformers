@@ -129,7 +129,7 @@ pred = pred.reshape(batch_size, n_vars, pred_len).transpose(1, 2)
 * Layers: 2 projection + 1 attention
 
 ## Benchmark results
-| Dataset | TCN MSE | N-BEATS MSE | PatchTST MSE | Patched ADT MSE | Improvement | Speedup |
+| Dataset | TCN* MSE | N-BEATS** MSE | PatchTST MSE | Patched ADT MSE | Improvement | Speedup |
 | :-----: | :------: | :---------: | :-----------: | :--------------: | :---------: | :-----: |
 | Weather | 0.3679 | 0.1737 | 0.1607 | **0.1548** | +3.7 % | × 1.45 |
 | Traffic | 0.5141 | 0.3297 | 0.3263 | **0.3206** | +1.8 % | × 1.38 |
@@ -138,6 +138,9 @@ pred = pred.reshape(batch_size, n_vars, pred_len).transpose(1, 2)
 | ETTm1 | 0.7694 | 0.3682 | 0.3704 | **0.3295** | +11.0 % | × 1.34 |
 | ETTm2 | 0.7570 | 0.1807 | 0.1850 | **0.1751** | +5.4 % | × 1.44 |
 
+\*TCN: Temporal Convolutional Network baseline.
+
+\**N-BEATS: Neural Basis Expansion Analysis for Interpretable Time Series Forecasting (ICLR 2020).
 
 Lightweight implementations were optimized for Colab and are not intended as reference Darts or Hugging Face baselines.
 
