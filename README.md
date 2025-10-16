@@ -1,7 +1,7 @@
-[![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE)
 # Attention-Driven Transformers for Time-Series Forecasting
 
 Simplified projection architectures guided by top-level attention
+[![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE)
 
 ## Overview
 
