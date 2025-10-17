@@ -129,7 +129,7 @@ pred = pred.reshape(batch_size, n_vars, pred_len).transpose(1, 2)
 * Layers: 2 projection + 1 attention
 
 ## Benchmark results
-| Dataset | TCN* MSE | N-BEATS** MSE | PatchTST MSE | Patched ADT MSE | Improvement | Speedup |
+| Dataset | TCN* MSE | N-BEATS** MSE | PatchTST MSE | PatchTST ADT MSE | Improvement | Speedup |
 | :-----: | :------: | :---------: | :-----------: | :--------------: | :---------: | :-----: |
 | Weather | 0.3679 | 0.1737 | 0.1607 | **0.1548** | +3.7 % | × 1.45 |
 | Traffic | 0.5141 | 0.3297 | 0.3263 | **0.3206** | +1.8 % | × 1.38 |
