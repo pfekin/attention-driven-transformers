@@ -587,11 +587,11 @@ if __name__ == "__main__":
         'd_model': 512,
         'n_heads': 8,
         'n_layers': 3,
-        'd_ff': 1024,
-        'batch_size': 32,
+        'd_ff': 2048,
+        'batch_size': 8,
         'n_epochs': 14,
         'lr': 1e-4,
-        'dropout': 0.15,
+        'dropout': 0.10,
         'use_projection': [True, True, False],  # Configure projection/attention layers
         'pos_encoding_bias': 10.0,  # Positional encoding bias for hybrid model
         'use_full_dataset': False,  # If True, use full dataset; if False, use subset
@@ -601,10 +601,10 @@ if __name__ == "__main__":
    
     # Dataset configurations
     datasets_config = [
-        # ("WikiText-2", lambda: load_wikitext2(tokenizer, max_length=CONFIG['max_seq_len'])),
+         ("WikiText-2", lambda: load_wikitext2(tokenizer, max_length=CONFIG['max_seq_len'])),
         # Uncomment to test other datasets:
         # ("IMDB", lambda: load_imdb(tokenizer, max_length=CONFIG['max_seq_len'])),
-         ("AG News", lambda: load_ag_news(tokenizer, max_length=CONFIG['max_seq_len'])),
+        # ("AG News", lambda: load_ag_news(tokenizer, max_length=CONFIG['max_seq_len'])),
         # ("CMU Book Summaries", lambda: load_cmu_book_summaries(
         #     tokenizer, max_length=CONFIG['max_seq_len'], split_data=True
         # )),
@@ -676,3 +676,4 @@ if __name__ == "__main__":
         speedup = r['hybrid_transformer_speed'] / r['baseline_transformer_speed']
         print(f"  -> Hybrid vs Baseline: PPL {ppl_improvement:+.1f}%, Speed {speedup:.2f}x")
 	
+
