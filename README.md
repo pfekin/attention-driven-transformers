@@ -219,6 +219,20 @@ You can run the full benchmark directly in Google Colab:
 }
 ```
 
+## Language Modeling (Experimental)
+
+We've extended our investigation to autoregressive language modeling to test whether the attention-driven approach generalizes beyond time series forecasting. 
+
+**Important:** These results are preliminary exploration on small NLP datasets (WikiText-2, IMDB, AG News, CMU Book Summaries) rather than definitive benchmarks. Comprehensive evaluation would require substantially more computational resources and larger datasets.
+
+### Key Findings
+
+The core principle holds: **projection blocks make attention work more effectively**. Models with projection blocks in lower layers + attention in final blocks achieve comparable or better perplexity with improved inference speed. This can be seen as an ablation of [Summation-Based Transformers](https://github.com/pfekin/summation-based-transformers) - the cumulative summation mechanism isn't necessary when combined with self-attention, attention-driven projection (simple GELU projections + strategic attention) is sufficient.
+
+Notably, the projection+attention pattern could be a repeating unit in deeper networks (e.g., [proj, proj, attn, proj, proj, attn, ...]) rather than just a single attention cap.
+
+The `causal_benchmark.py` script is provided as a test bed for those interested in exploring these ideas further.
+
 ## Contact and collaboration
 
 Seeking collaborators with access to large-scale compute resources to train attention-driven transformers at language-modeling scale.
