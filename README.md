@@ -221,7 +221,7 @@ You can run the full benchmark directly in Google Colab:
 
 ## Language Modeling (Experimental)
 
-The investigation has been extended to autoregressive language modeling to test whether the attention-driven approach generalizes beyond time series forecasting.
+This work has been extended to autoregressive language modeling to test whether the attention-driven approach generalizes beyond time series forecasting.
 
 **Important:** These results are preliminary exploration on small NLP datasets (WikiText-2, IMDB, AG News, CMU Book Summaries) rather than definitive benchmarks. Comprehensive evaluation would require substantially more computational resources and larger datasets.
 
