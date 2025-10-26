@@ -184,10 +184,10 @@ You can run the full benchmark directly in Google Colab:
 
 ## References
 
-1. Nie et al., *PatchTST: A Time Series is Worth 64 Words*, ICLR 2023 — [GitHub](https://github.com/yuqinie98/PatchTST)
-2. **Ekin**, *Summation-Based Transformers*, TechRxiv 2025 — [DOI 10.36227/techrxiv.175790522.25734653/v2](https://doi.org/10.36227/techrxiv.175790522.25734653/v2)
-3. Vaswani et al., *Attention Is All You Need*, NeurIPS 2017
-4. Oreshkin et al., *N-BEATS: Neural Basis Expansion Analysis for Interpretable Time Series Forecasting*, ICLR 2020
+1. Nie et al., [*PatchTST: A Time Series is Worth 64 Words*](https://github.com/yuqinie98/PatchTST), ICLR 2023
+2. **Ekin**, [*Summation-Based Transformers*](https://doi.org/10.36227/techrxiv.175790522.25734653/v2), TechRxiv 2025
+3. Vaswani et al., [*Attention Is All You Need*](https://papers.nips.cc/paper_files/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf), NeurIPS 2017
+4. Oreshkin et al., [*N-BEATS: Neural Basis Expansion Analysis for Interpretable Time Series Forecasting*](https://arxiv.org/abs/1905.10437), ICLR 2020
 
 ## Limitations and future work
 
@@ -225,7 +225,7 @@ This work has been extended to autoregressive language modeling to test whether 
 
 **Important:** These results are preliminary exploration on small NLP datasets (WikiText-2, IMDB, AG News, CMU Book Summaries) rather than definitive benchmarks. Comprehensive evaluation would require substantially more computational resources and larger datasets.
 
-The core principle holds: projection blocks make attention work more effectively. Models with projection blocks combined with strategically placed attention layers achieve comparable or better perplexity with improved inference speed. This can be seen as an ablation of [Summation-Based Transformers](https://github.com/pfekin/summation-based-transformers) - the cumulative summation mechanism isn't necessary; attention-driven projection (simple GELU projections + strategic attention placement) is sufficient.
+The core principle holds: projection blocks make attention work more effectively. Models with projection blocks combined with strategically placed attention layers achieve comparable or better perplexity with improved inference speed. This can be seen as an ablation of [Summation-Based Transformers](https://github.com/pfekin/summation-based-transformers) - the cumulative summation mechanism is not necessary when combined with attention; attention-driven projection (simple GELU projections + strategic attention placement) is sufficient.
 
 Notably, attention layers can be flexibly positioned - at the end, in the middle of projection blocks, or as repeating patterns (e.g., [proj, proj, attn, proj, proj, attn, ...]). The key is the interplay between projection and attention, not a rigid architectural template.
 
