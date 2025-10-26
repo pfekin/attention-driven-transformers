@@ -1,18 +1,19 @@
 # Attention-Driven Transformers for Time-Series Forecasting
 
-Simplified projection architectures guided by top-level attention
+Simplified projection architectures driven by attention
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE)
 
 ## Overview
 
-This repository introduces **Attention-Driven Transformers (ADTs)** — forecasting models in which a single top attention layer drives multiple lightweight projection blocks.
+This repository introduces **Attention-Driven Transformers (ADTs)** — forecasting models in which strategically placed attention layers drive multiple lightweight projection blocks.
 
 The approach extends the 2025 [*Summation-Based Transformers* (TechRxiv)](https://doi.org/10.36227/techrxiv.175790522.25734653/v2) research and its [accompanying code](https://github.com/pfekin/summation-based-transformers), which first proposed that attention acts as a global representational driver rather than a uniformly repeated mechanism.
 
-In ADTs, most layers are simple linear–activation projections, while a top attention block organizes temporal dependencies across patch embeddings. The design yields models that are faster and more memory-efficient than dense-attention baselines such as PatchTST, while often improving accuracy.
+In ADTs, most layers are simple linear–activation projections, while strategically placed attention blocks (O(n²) complexity) organizes temporal dependencies across patch embeddings. The design yields models that are faster and more memory-efficient than dense-attention baselines such as PatchTST, while often improving accuracy.
 
-In deeper architectures such as large language models, attention may appear interleaved across layers rather than concentrated at the top. The attention-driven principle—attention globally organizing simpler transformations—remains consistent across scales.
+The attention-driven principle—attention globally organizing simpler transformations—remains consistent across scales.
+Notably, attention layers can be flexibly positioned - at the end ([proj, proj, attn]), in the middle of projection blocks ([proj, attn, proj]), or as repeating patterns. The key is the interplay between projection and attention, not a rigid architectural template.
 
 ## Architecture summary
 
@@ -176,7 +177,7 @@ You can run the full benchmark directly in Google Colab:
 
 ## Key findings
 
-1. **Attention-driven architecture** – A single top attention block drives simpler projection layers, structuring representations efficiently without dense attention stacking.
+1. **Attention-driven architecture** – Attention-driven architecture drives simpler projection layers, structuring representations efficiently without dense attention stacking.
 2. **Per-variable temporal modeling** – Each variable is modeled independently across time using shared parameters, enabling efficient parallelization.
 3. **Efficient temporal modeling** – Projection layers encode local patch features O(n), the attention layer models cross-patch dependencies O(n²).
 4. **Generalizable attention hierarchy** – Forecasting models concentrate attention at the top, while deeper architectures (e.g., LLMs) can interleave attention with projection layers. In both cases, attention functions as the organizational driver of representation.
