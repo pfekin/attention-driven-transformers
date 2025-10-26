@@ -185,7 +185,7 @@ You can run the full benchmark directly in Google Colab:
 ## References
 
 1. Nie et al., [*PatchTST: A Time Series is Worth 64 Words*](https://github.com/yuqinie98/PatchTST), ICLR 2023
-2. **Ekin**, [*Summation-Based Transformers*](https://doi.org/10.36227/techrxiv.175790522.25734653/v2), TechRxiv 2025
+2. Ekin, [*Summation-Based Transformers*](https://doi.org/10.36227/techrxiv.175790522.25734653/v2), TechRxiv 2025
 3. Vaswani et al., [*Attention Is All You Need*](https://papers.nips.cc/paper_files/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf), NeurIPS 2017
 4. Oreshkin et al., [*N-BEATS: Neural Basis Expansion Analysis for Interpretable Time Series Forecasting*](https://arxiv.org/abs/1905.10437), ICLR 2020
 
