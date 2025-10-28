@@ -171,7 +171,6 @@ CONFIG = {
     'dropout': 0.15,
     # Configure projection/attention layers: True = Projection, False = Attention
     'use_projection': [True, True, False],   # Default: 2 projection layers + 1 attention layer.
-    # Improved performance delta using [True, True, False, True, True, False] vs 6 layer attention
     'pos_encoding_bias': 0.0  # Positional encoding bias for hybrid model
 }
 ```
