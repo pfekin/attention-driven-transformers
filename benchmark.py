@@ -3,7 +3,7 @@ Minimal PatchTST Implementation with Summation-Based Attention + Other Architect
 
 Compares:
 1. Baseline PatchTST with standard attention (custom implementation)
-2. Hybrid PatchTST with summation attention 
+2. Hybrid PatchTST with configurable projection/attention blocks
 3. N-BEATS (custom implementation)
 
 Benchmark on ETTh1, ETTh2, ETTm1, ETTm2, Weather, Traffic, Electricity datasets
@@ -167,7 +167,7 @@ class StandardAttentionBlock(nn.Module):
 
 
 class ProjectionBlock(nn.Module):
-    """Summation-based attention block"""
+    """Projection-based block (no attention mechanism)"""
     def __init__(self, d_model, d_ff, dropout=0.1):
         super().__init__()
         self.proj = nn.Sequential(
@@ -185,15 +185,15 @@ class ProjectionBlock(nn.Module):
         )
 
     def forward(self, x):
-        summed = self.proj(x)
-        x = self.norm1(x + summed)
+        proj_out = self.proj(x)
+        x = self.norm1(x + proj_out)
         ffn_out = self.ffn(x)
         x = self.norm2(x + ffn_out)
         return x
 
 
 class BaselinePatchTST(nn.Module):
-    """PatchTST with standard attention"""
+    """PatchTST with standard attention in all layers"""
     def __init__(self, n_vars, seq_len, pred_len, patch_len=16, stride=8,
                  d_model=128, n_heads=8, n_layers=3, d_ff=256, dropout=0.1):
         super().__init__()
@@ -223,31 +223,51 @@ class BaselinePatchTST(nn.Module):
 
 
 class HybridPatchTST(nn.Module):
-    """PatchTST with linear projection + final standard attention"""
+    """PatchTST with configurable projection/attention blocks"""
     def __init__(self, n_vars, seq_len, pred_len, patch_len=16, stride=8,
-                 d_model=128, n_heads=8, n_layers=3, d_ff=256, dropout=0.1):
+                 d_model=128, n_heads=8, n_layers=3, d_ff=256, dropout=0.1,
+                 use_projection=None, pos_encoding_bias=1.0):
         super().__init__()
+        
+        # Default configuration: projection blocks + final attention
+        if use_projection is None:
+            use_projection = [True] * (n_layers - 1) + [False]
+        
+        # Ensure use_projection list matches n_layers
+        if len(use_projection) != n_layers:
+            raise ValueError(f"use_projection list length ({len(use_projection)}) must match n_layers ({n_layers})")
+        
         self.patching = Patching(patch_len, stride)
         self.patch_embedding = nn.Linear(patch_len, d_model)
         num_patches = (seq_len - patch_len) // stride + 1
         self.pos_encoding = nn.Parameter(torch.randn(1, num_patches, d_model))
-        self.summation_blocks = nn.ModuleList([
-            ProjectionBlock(d_model, d_ff, dropout)
-            for _ in range(n_layers - 1)
-        ])
-        self.final_attention = StandardAttentionBlock(d_model, n_heads, d_ff, dropout)
+        self.pos_encoding_bias = pos_encoding_bias
+        
+        # Build layers based on use_projection configuration
+        self.blocks = nn.ModuleList()
+        for is_projection in use_projection:
+            if is_projection:
+                self.blocks.append(ProjectionBlock(d_model, d_ff, dropout))
+            else:
+                self.blocks.append(StandardAttentionBlock(d_model, n_heads, d_ff, dropout))
+        
         self.head = nn.Linear(d_model * num_patches, pred_len)
         self.n_vars = n_vars
         self.pred_len = pred_len
+        self.use_projection = use_projection
 
     def forward(self, x):
         batch_size = x.shape[0]
         patches, n_vars, num_patches = self.patching(x)
         x = self.patch_embedding(patches)
-        x = x * self.pos_encoding
-        for block in self.summation_blocks:
+        
+        # Apply positional encoding (using multiplication as in causal_benchmark.py)
+        x = x * (self.pos_encoding + self.pos_encoding_bias)
+        
+        # Apply blocks
+        for block in self.blocks:
             x = block(x)
-        x = self.final_attention(x)
+        
         x = x.reshape(batch_size * n_vars, -1)
         x = self.head(x)
         x = x.reshape(batch_size, n_vars, self.pred_len).transpose(1, 2)
@@ -416,7 +436,9 @@ def run_experiment(dataset_name, train_loader, val_loader, test_loader, n_vars, 
             n_vars=n_vars, seq_len=config['seq_len'], pred_len=config['pred_len'],
             patch_len=config['patch_len'], stride=config['stride'],
             d_model=config['d_model'], n_heads=config['n_heads'],
-            n_layers=config['n_layers'], d_ff=config['d_ff'], dropout=config['dropout']
+            n_layers=config['n_layers'], d_ff=config['d_ff'], dropout=config['dropout'],
+            use_projection=config.get('use_projection', None),
+            pos_encoding_bias=config.get('pos_encoding_bias', 1.0)
         )),
         ("N-BEATS", lambda: NBeats(
             n_vars=n_vars, seq_len=config['seq_len'], pred_len=config['pred_len'],
@@ -425,7 +447,7 @@ def run_experiment(dataset_name, train_loader, val_loader, test_loader, n_vars, 
     ]
 
     for idx, (model_name, model_fn) in enumerate(models_to_test, 1):
-        print(f"\n[{idx}/5] Training {model_name}...")
+        print(f"\n[{idx}/{len(models_to_test)}] Training {model_name}...")
         
         model = model_fn().to(device)
         print(f"{model_name} params: {sum(p.numel() for p in model.parameters()):,}")
@@ -474,7 +496,10 @@ if __name__ == "__main__":
         'batch_size': 32,
         'n_epochs': 10,
         'lr': 1e-4,
-        'dropout': 0.15
+        'dropout': 0.15,
+        # Configure projection/attention layers: True = Projection, False = Attention
+        'use_projection': [True, True, False],  # Default: 2 projection layers + 1 attention layer
+        'pos_encoding_bias': 0.0  # Positional encoding bias for hybrid model
     }
 
     datasets_to_run = ["ETTh1", "ETTh2", "ETTm1", "ETTm2", "Weather", "Traffic"] # re-insert "Electricity", dataset is huge
@@ -497,7 +522,7 @@ if __name__ == "__main__":
         print(f"\n{r['dataset']}:")
         print(f"  Baseline PatchTST: MSE={r['baseline_patchtst_mse']:.4f}, MAE={r['baseline_patchtst_mae']:.4f}, Speed={r['baseline_patchtst_speed']:.1f} samples/s")
         print(f"  Hybrid PatchTST:   MSE={r['hybrid_patchtst_mse']:.4f}, MAE={r['hybrid_patchtst_mae']:.4f}, Speed={r['hybrid_patchtst_speed']:.1f} samples/s")
-        print(f"  N-BEATS:           MSE={r['n_beats_mse']:.4f}, MAE={r['n_beats_mae']:.4f}, Speed={r['n_beats_speed']:.1f} samples/s")
+        print(f"  N-BEATS:           MSE={r['n_beats_mse']:.4f}, MAE={r['n_beats_mse']:.4f}, Speed={r['n_beats_speed']:.1f} samples/s")
         
         improvement = ((r['baseline_patchtst_mse'] - r['hybrid_patchtst_mse']) / r['baseline_patchtst_mse']) * 100
         speedup = r['hybrid_patchtst_speed'] / r['baseline_patchtst_speed']
