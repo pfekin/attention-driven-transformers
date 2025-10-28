@@ -127,7 +127,7 @@ pred = pred.reshape(batch_size, n_vars, pred_len).transpose(1, 2)
 * Environment: Google Colab T4 GPU (16 GB)
 * Datasets: ETTh1/2, ETTm1/2, Weather, Traffic
 * Training: Adam (lr = 1e-4), GELU activation, multiplicative positional encoding
-* Layers: 2 projection + 1 attention
+* Layers: [projection, projection, attention]
 
 ## Benchmark results
 | Dataset | TCN* MSE | N-BEATS** MSE | PatchTST MSE | PatchTST ADT MSE | Improvement | Speedup |
