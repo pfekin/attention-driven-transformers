@@ -169,6 +169,9 @@ CONFIG = {
     'n_epochs': 10,
     'lr': 1e-4,
     'dropout': 0.15,
+    # Configure projection/attention layers: True = Projection, False = Attention
+    'use_projection': [True, True, False],  # Default: 2 projection layers + 1 attention layer. Works even better with [True, True, False, True, True, False]
+    'pos_encoding_bias': 0.0  # Positional encoding bias for hybrid model
 }
 ```
 You can run the full benchmark directly in Google Colab:
