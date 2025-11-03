@@ -219,10 +219,9 @@ The full paper is available here: **"Attention-Driven Transformers", 2025** [ðŸ“
   url     = {https://github.com/pfekin/attention-driven-transformers}
 }
 
-```bibtex
 @article{ekin2025attention,
   title={Attention-Driven Transformers},
-  author={Pascal, Ekin},
+  author={Pascal Ekin},
   year={2025},
   note={Preprint}
 }
