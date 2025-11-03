@@ -203,6 +203,12 @@ You can run the full benchmark directly in Google Colab:
   * Interleaved attention–projection stacks for deeper models
   * Theoretical analysis of attention-driven representation dynamics
 
+## Paper
+
+The full paper is available here: **"Attention-Driven Transformers", 2025** [📄 Download Paper](./Attention_Driven_Transformers.pdf)
+
+**Note:** This paper will be submitted to TechRxiv. The preprint link will be updated here once available.
+
 ## Citation
 
 ```bibtex
@@ -213,13 +219,12 @@ You can run the full benchmark directly in Google Colab:
   url     = {https://github.com/pfekin/attention-driven-transformers}
 }
 
-@article{Summation_Based_Transformers_2025,
-  title={Summation-Based Transformers: A Path Toward Linear Complexity Sequence Modeling},
-  author={Pascal Ekin},
-  journal={TechRxiv},  
+```bibtex
+@article{ekin2025attention,
+  title={Attention-Driven Transformers},
+  author={Pascal, Ekin},
   year={2025},
-  doi={10.36227/techrxiv.175790522.25734653/v2},  
-  url={https://doi.org/10.36227/techrxiv.175790522.25734653/v2},
+  note={Preprint}
 }
 ```
 
