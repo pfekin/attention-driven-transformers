@@ -4,6 +4,10 @@ Simplified projection architectures driven by attention
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE)
 
+The full paper is available here: **"Attention-Driven Transformers", 2025** [📄 Download Paper](./Attention_Driven_Transformers.pdf)
+
+**Note:** This paper has been submitted to TechRxiv. The preprint link will be updated here once available.
+
 ## Overview
 
 This repository introduces **Attention-Driven Transformers (ADTs)** — forecasting models in which strategically placed attention layers drive multiple lightweight projection blocks.
@@ -202,12 +206,6 @@ You can run the full benchmark directly in Google Colab:
   * Cross-variable attention extensions
   * Interleaved attention–projection stacks for deeper models
   * Theoretical analysis of attention-driven representation dynamics
-
-## Paper
-
-The full paper is available here: **"Attention-Driven Transformers", 2025** [📄 Download Paper](./Attention_Driven_Transformers.pdf)
-
-**Note:** This paper will be submitted to TechRxiv. The preprint link will be updated here once available.
 
 ## Citation
 
