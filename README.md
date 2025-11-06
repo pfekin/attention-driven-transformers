@@ -218,7 +218,10 @@ You can run the full benchmark directly in Google Colab:
 @article{ekin2025attention,
   title={Attention-Driven Transformers},
   author={Pascal Ekin},
+  journal={TechRxiv}, 
   year={2025},
+  doi={10.36227/techrxiv.176240516.62721984/v1},  
+  url={https://doi.org/10.36227/techrxiv.176240516.62721984/v1},
   note={Preprint}
 }
 ```
