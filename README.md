@@ -4,9 +4,7 @@ Simplified projection architectures driven by attention
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE)
 
-The full paper is available here: **"Attention-Driven Transformers", 2025** [📄 Download Paper](./Attention_Driven_Transformers.pdf)
-
-**Note:** This paper has been submitted to TechRxiv. The preprint link will be updated here once available.
+The full paper is available here: **"Attention-Driven Transformers", 2025** [📄 Download Paper](https://www.techrxiv.org/users/954609/articles/1355659-attention-driven-transformers)
 
 ## Overview
 
