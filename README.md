@@ -233,7 +233,7 @@ This work has been extended to autoregressive language modeling to test whether 
 
 **Important:** These results are preliminary exploration on small NLP datasets (WikiText-2, IMDB, AG News, CMU Book Summaries) rather than definitive benchmarks. Comprehensive evaluation would require substantially more computational resources and larger datasets.
 
-The core principle holds: projection blocks make attention work more effectively. Models with projection blocks combined with strategically placed attention layers achieve comparable or better perplexity with improved inference speed. This can be seen as an ablation of [Summation-Based Transformers](https://github.com/pfekin/summation-based-transformers) - the cumulative summation mechanism is not necessary when combined with attention; attention-driven projection (simple GELU projections + strategic attention placement) is sufficient.
+The core principle holds: projection blocks make attention work more effectively. Models with projection blocks combined with strategically placed attention layers achieve comparable or better perplexity with improved inference speed. This can be seen as an ablation of [Summation-Based Transformers](https://github.com/pfekin/summation-based-transformers). The cumulative summation mechanism is not necessary when combined with attention, attention-driven projection (simple GELU projections + strategic attention placement) is sufficient.
 
 Notably, attention layers can be flexibly positioned - at the end, in the middle of projection blocks, or as repeating patterns (e.g., [proj, proj, attn, proj, proj, attn, ...]). The key is the interplay between projection and attention, not a rigid architectural template.
 
